@@ -6,11 +6,29 @@
 
 generator client {
   provider = "prisma-client-js"
-  output   = "../generated/prisma"
+  output   = "../generated/prisma/client"
 }
 
 datasource db {
   provider = "postgresql"
+}
+
+enum PropertyPurpose {
+  SALE
+  RENT
+}
+
+enum PropertyType {
+  APARTMENT
+  HOUSE
+  VILLA
+  LAND
+  COMMERCIAL
+}
+
+enum MediaType {
+  IMAGE
+  VIDEO
 }
 
 model Admin {
@@ -20,6 +38,16 @@ model Admin {
   name     String?
 
   properties Property[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model User {
+  id       String  @id @default(cuid())
+  email    String  @unique
+  password String
+  name     String?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -51,19 +79,6 @@ model Property {
   updatedAt DateTime @updatedAt
 }
 
-enum PropertyPurpose {
-  SALE
-  RENT
-}
-
-enum PropertyType {
-  APARTMENT
-  HOUSE
-  VILLA
-  LAND
-  COMMERCIAL
-}
-
 model Address {
   id        String  @id @default(cuid())
   country   String
@@ -84,11 +99,6 @@ model Media {
 
   propertyId String
   property   Property @relation(fields: [propertyId], references: [id])
-}
-
-enum MediaType {
-  IMAGE
-  VIDEO
 }
 
 model Amenity {
